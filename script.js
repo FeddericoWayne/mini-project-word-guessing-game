@@ -1,3 +1,4 @@
+/* Global Variables */
 var title = document.querySelector("#title");
 var startGame = document.querySelector(".start-game");
 var guess = document.querySelector("#word");
@@ -15,9 +16,9 @@ var loses = 0;
 var tryAgain = document.querySelector("#play-again");
 var lostGame = document.createElement('h3');
 
-
 tryAgain.setAttribute("style","display:none");
 
+/* Sets up Countdown Timer */
 function timerOn() {
 
     timeLeft=20;
@@ -26,15 +27,16 @@ function timerOn() {
         timer.textContent = "You have "+ timeLeft + " seconds left!"
         timeLeft--;
 
+        /* Losing Scenario: out of Tiome */
         if (timeLeft === -1) {
             clearInterval(countDownToZero);
             lose();
-    
         }
     },1000);
 
 }
 
+/* To Display Word */
 function displayWord() {
 
     randomWord = wordList[Math.floor(Math.random()*wordList.length)];
@@ -53,13 +55,14 @@ function displayWord() {
         wordDisplay.textContent = blindWord.join(" ");
 
     }
+
+    /* Winning Scenario */
 }
 
 
-
+/* For Player to Gues Word */
 function guessWord(event) {
  
-    
 
     for (var y=0; y<randomWord.length; y++) {
         if (event.key === randomWord[y]) {
@@ -74,7 +77,7 @@ function guessWord(event) {
 
 
 
-
+/* If Player Runs out of Time */
 function lose() {
 
     lostGame.removeAttribute("style","display:none");
@@ -88,12 +91,13 @@ function lose() {
 
 }
 
+/* Play-Again Function */
 function playAgain() {
     tryAgain.removeAttribute("style","display:none");
 
 }
 
-
+/* Event Listerners */
 startGame.addEventListener("click",displayWord);
 document.addEventListener("keydown",guessWord);
 tryAgain.addEventListener("click",displayWord);
