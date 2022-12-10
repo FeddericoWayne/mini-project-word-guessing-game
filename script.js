@@ -1,3 +1,4 @@
+var title = document.querySelector("#title");
 var startGame = document.querySelector(".start-game");
 var guess = document.querySelector("#word");
 var countDown = document.querySelector(".count-down");
@@ -8,12 +9,44 @@ var wordDisplay = document.querySelector("#word");
 var wordList = ["cat", "dog", "house", "journey", "thanksgiving", "bootcamp"];
 var timeLeft = 20;
 var blindWord = [];
-var randomWord = wordList[Math.floor(Math.random()*wordList.length)];
+var randomWord = "";
+var wins = 0;
+var loses = 0;
+var tryAgain = document.querySelector("#play-again");
+var lostGame = document.createElement('h3');
 
 
+tryAgain.setAttribute("style","display:none");
 
+function timerOn() {
+
+    timeLeft=20;
+
+    var countDownToZero = setInterval(function(){
+        timer.textContent = "You have "+ timeLeft + " seconds left!"
+        timeLeft--;
+
+        if (timeLeft === -1) {
+            clearInterval(countDownToZero);
+            lose();
+    
+        }
+    },1000);
+
+}
 
 function displayWord() {
+
+    randomWord = wordList[Math.floor(Math.random()*wordList.length)];
+
+    lostGame.setAttribute("style","display:none");
+
+    timerOn();
+
+    winCount.innerHTML = "Your Wins: " + wins;
+    loseCount.innerHTML = "Your Loses: " + loses;
+
+    startGame.remove();
     
     for (var x=0; x<randomWord.length; x++) {
         blindWord[x] = "_";
@@ -22,14 +55,17 @@ function displayWord() {
     }
 }
 
+
+
 function guessWord(event) {
-    var key = event.key;
+ 
+    
 
     for (var y=0; y<randomWord.length; y++) {
-        if (key === randomWord[y]) {
+        if (event.key === randomWord[y]) {
             console.log(event.key);
-            //randomWord[y]=blindWord[y];
-            //wordDisplay.textContent = blindWord.join(" ");
+            blindWord[y] = randomWord[y];
+             wordDisplay.textContent = blindWord.join(" ");
         }
 
     }
@@ -39,23 +75,26 @@ function guessWord(event) {
 
 
 
-function timerOn() {
-    var countDownToZero = setInterval(function(){
-        timer.textContent = "You have "+ timeLeft + " seconds left!"
-        timeLeft--;
+function lose() {
 
-        if (timeLeft === -1) {
-            clearInterval(countDownToZero);
+    lostGame.removeAttribute("style","display:none");
+    lostGame.textContent = "You Lost!"
+    title.appendChild(lostGame);
+    loses ++;
+    loseCount.innerHTML = "Your Loses: " + loses;
+
+    playAgain();
     
-        }
-    },1000);
 
+}
 
+function playAgain() {
+    tryAgain.removeAttribute("style","display:none");
 
 }
 
 
 startGame.addEventListener("click",displayWord);
 document.addEventListener("keydown",guessWord);
-countDown.addEventListener("click",timerOn)
+tryAgain.addEventListener("click",displayWord);
 
